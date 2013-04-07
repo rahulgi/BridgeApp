@@ -13,6 +13,19 @@
     </div>
   </div>
   <div class="container-fluid">
+    {{> body}}
+  </div>
+</body>
+
+<template name="body">
+  {{#if main}}
+    <div id="container">
+      <form id="name-form">
+        <input type="text" placeholder="Your name" id="name" class="input-block-level" />
+        <button class="btn btn-large btn-primary" type="submit">Continue</button>
+      </div>
+    </div>
+  {{else}}
     <div class="row-fluid">
       <div class="span4">
         <div class="accordion">
@@ -87,25 +100,18 @@ fiant sollemnes in futurum.
         </div>
       </div>
       <div class="span8">
-        {{> body}}
+
+        {{#each title}}
+          <h1>{{tstring this}}</h1>
+          <ul>
+            {{#each item this}}
+              <li data-title="{{../this}}" data-item="{{this}}" {{selected ../this this}}>{{lstring ../this this}}</li>
+            {{/each}}
+          </ul>
+        {{/each}}
+
       </div>
     </div>
-  </div>
-</body>
-
-<template name="body">
-  {{#if main}}
-    <input type="text" placeholder="Name" id="name" />
-    <button class="btn" type="submit">Continue</button>
-  {{else}}
-    {{#each title}}
-    <h1>{{tstring this}}</h1>
-    <ul>
-      {{#each item this}}
-      <li data-title="{{../this}}" data-item="{{this}}" {{selected ../this this}}>{{lstring ../this this}}</li>
-      {{/each}}
-    </ul>
-    {{/each}}
   {{/if}}
 </template>
 
