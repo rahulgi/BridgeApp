@@ -74,9 +74,9 @@ if (Meteor.isClient) {
   Meteor.startup(function () {
 
     Meteor.autorun(function () { // Auto-update 'name'
-      var id = Indicators.findOne(Session.get('id'));
-      if (id)
-        Session.set('name', id.name);
+      var ind = Indicators.findOne(Session.get('id'));
+      if (ind)
+        Session.set('name', ind.name);
     });
     Meteor.autorun(function () {
       if (Session.get('mode') == 'edit') {
@@ -184,6 +184,27 @@ if (Meteor.isClient) {
         else
           Indicators.update(Session.get('id'), {$set: param});
       }
+    }
+  });
+
+  Template.search.helpers({
+    value: function (key) {
+      var ind = Indicators.findOne(Session.get('id'));
+      if (ind)
+        return ind[key];
+    },
+    disabled: function () {
+      if (Session.get('mode') == 'view')
+        return 'disabled';
+      return '';
+    }
+  });
+  Template.search.events({
+    'keyup': function (e) {
+      var param = {};
+      var id = e.srcElement.id;
+      param[id] = $('#' + id)[0].value;
+      Indicators.update(Session.get('id'), {$set: param});
     }
   });
 
