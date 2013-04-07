@@ -1,9 +1,3 @@
-<html>
-<script src="http://code.jquery.com/jquery-latest.min.js" type="text/javascript"></script>
-<script src="http://d3js.org/d3.v3.min.js"></script>
-
-<script>
-
 function Network(){
 //Data-
 var node = null;
@@ -404,23 +398,9 @@ var data = {
 }
 
 
-
-
-
-$(document).ready(function(){
-	var myNetwork = Network();
-	myNetwork("#visualization",data);
-
-
-})
-
-
-
-</script>
-
-<head>
-	</head>
-	<body>
-		<div id="visualization"/>
-	</body>
-</html>
+if (Meteor.isClient) {
+	Meteor.startup(function() {
+		var myNetwork = Network();
+		myNetwork("#visualization",data);
+	});
+}

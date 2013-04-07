@@ -47,7 +47,7 @@ var lstrings = [
       "Purposelessness"]
   ];
 
-var template_helpers = {
+template_helpers = {
   main: function () { return Session.get('mode') === undefined; },
   title: function () { return _.range(tstrings.length); },
   tstring: function (t) { return tstrings[t]; },
@@ -158,46 +158,56 @@ if (Meteor.isClient) {
     Backbone.history.start({pushState: true});
   });
 
-  Template.body.helpers(template_helpers);
-  Template.body.events({
-    'click': function (e) {
-      var elem = e.toElement;
-      if (Session.get('mode') === undefined && elem.tagName == 'BUTTON') { // Clicked on continue button on home page
-        var name = document.getElementById('name').value;
-        if (name == '') {
-          document.getElementById('name').style['border-color'] = 'red';
-          return;
-        }
-        Session.set('name', name);
-        var userid = Indicators.insert({date: new Date(), name: name});
-        router.navigate(userid + '/edit', {trigger: true});
-        return;
-      } else if (Session.get('mode') != 'edit')
-        return;
-      var clicked = e.toElement.dataset;
-      if (Object.keys(clicked).length !== 0) { // clicked is non-empty - it is a <li>
-        var concat = clicked.title + '_' + clicked.item;
-        var param = {};
-        param[concat] = true;
-        if (elem.classList.contains('selected'))
-          Indicators.update(Session.get('id'), {$unset: param});
-        else
-          Indicators.update(Session.get('id'), {$set: param});
-      }
-    }
-  });
+  handleIndicatorClick = function (t, l) {
+    var concat = t + '_' + l;
+    var param = {};
+    param[concat] = true;
+    if (elem.classList.contains('selected'))
+      Indicators.update(Session.get('id'), {$unset: param});
+    else
+      Indicators.update(Session.get('id'), {$set: param});
+  }
 
-  Template.alert.alert = function (e) {
-    Indicators.update(Session.get('id'), {$set: {alert: true}});
-    Meteor.call("alert", Session.get('id'), Session.get('name'));
-    $('#not-alerted').hide();
-  }
-  Template.alert.end = function () {
-    Indicators.update(Session.get('id'), {$set: {end: true}});
-  }
-  Template.alert.edit = function () {
-    return Session.get('mode') == 'edit';
-  }
+  // Template.body.helpers(template_helpers);
+  // Template.body.events({
+  //   'click': function (e) {
+  //     var elem = e.toElement;
+  //     if (Session.get('mode') === undefined && elem.tagName == 'BUTTON') { // Clicked on continue button on home page
+  //       var name = document.getElementById('name').value;
+  //       if (name == '') {
+  //         document.getElementById('name').style['border-color'] = 'red';
+  //         return;
+  //       }
+  //       Session.set('name', name);
+  //       var userid = Indicators.insert({date: new Date(), name: name});
+  //       router.navigate(userid + '/edit', {trigger: true});
+  //       return;
+  //     } else if (Session.get('mode') != 'edit')
+  //       return;
+  //     var clicked = e.toElement.dataset;
+  //     if (Object.keys(clicked).length !== 0) { // clicked is non-empty - it is a <li>
+  //       var concat = clicked.title + '_' + clicked.item;
+  //       var param = {};
+  //       param[concat] = true;
+  //       if (elem.classList.contains('selected'))
+  //         Indicators.update(Session.get('id'), {$unset: param});
+  //       else
+  //         Indicators.update(Session.get('id'), {$set: param});
+  //     }
+  //   }
+  // });
+
+  // Template.alert.alert = function (e) {
+  //   Indicators.update(Session.get('id'), {$set: {alert: true}});
+  //   Meteor.call("alert", Session.get('id'), Session.get('name'));
+  //   $('#not-alerted').hide();
+  // }
+  // Template.alert.end = function () {
+  //   Indicators.update(Session.get('id'), {$set: {end: true}});
+  // }
+  // Template.alert.edit = function () {
+  //   return Session.get('mode') == 'edit';
+  // }
 }
 
 if (Meteor.isServer) {
