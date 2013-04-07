@@ -15,17 +15,15 @@ if (Meteor.isClient) {
       view: function (id) {
         Session.set('id', id);
         Session.set('mode', 'view');
-      },
-      main: function () {
-        Session.set('mode', 'main');
       }
     });
     var router = new Router;
-    Backbone.history.start({pushState: true});
-    if (Session.get('mode') == 'main') {
-      var userid = Indicators.insert({});
+    router.on('route:main', function () {
+      var userid = Indicators.insert({date: new Date()});
       router.navigate('/' + userid + '/edit');
-    }
+      Session.set('id', userid);
+    });
+    Backbone.history.start({pushState: true});
   });
 
 
