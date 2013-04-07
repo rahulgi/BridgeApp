@@ -64,6 +64,9 @@ var template_helpers = {
     if (Indicators.findOne(param))
       return "class=selected";
     return '';
+  },
+  url: function () {
+    return window.location.protocol + "//" + window.location.host + "/" + Session.get('id');
   }
 };
 
@@ -75,8 +78,10 @@ if (Meteor.isClient) {
   });
   Meteor.autosubscribe(function () {
     if (Session.get('mode') == 'edit') {
-      if (Indicators.findOne({'_id': Session.get('id'), end: true})) // This ID has already been ended - redirect to the viewing URL
+      if (Indicators.findOne({'_id': Session.get('id'), end: true})) {// This ID has already been ended - redirect to the viewing URL
+        console.log('a');
         router.navigate(Session.get('id'), {trigger: true});
+      }
     }
   });
 
@@ -107,7 +112,7 @@ if (Meteor.isClient) {
   Template.body.events({
     'click': function (e) {
       var elem = e.toElement;
-      if (Session.get('mode') === undefined && elem.tagName == 'BUTTON') { // clicked continue button on home page
+      if (Session.get('mode') === undefined && elem.tagName == 'BUTTON') { // Clicked on continue button on home page
         var name = document.getElementById('name').value;
         if (name == '') {
           document.getElementById('name').style['border-color'] = 'red';
@@ -117,11 +122,10 @@ if (Meteor.isClient) {
         var userid = Indicators.insert({date: new Date(), name: name});
         router.navigate(userid + '/edit', {trigger: true});
         return;
-      }
-      else if (Session.get('mode') != 'edit')
+      } else if (Session.get('mode') != 'edit')
         return;
       var clicked = e.toElement.dataset;
-      if (Object.keys(clicked).length !== 0) { // clicked is non-empty - should be a <li>
+      if (Object.keys(clicked).length !== 0) { // clicked is non-empty - it is a <li>
         var concat = clicked.title + '_' + clicked.item;
         var param = {};
         param[concat] = true;

@@ -6,7 +6,7 @@
   <div class="navbar navbar-inverse navbar-fixed-top">
     <div class="navbar-inner">
       <div class="container-fluid">
-        <a class="brand" href="#">Bridge Peer Counselling Suicide Call Assist</a>
+        <a class="brand" href="/">Bridge Peer Counselling Suicide Call Assist</a>
         {{> alert}}
         </ul>
       </div>
@@ -19,11 +19,9 @@
 
 <template name="body">
   {{#if main}}
-    <div id="container">
-      <form id="name-form">
-        <input type="text" placeholder="Your name" id="name" class="input-block-level" />
-        <button class="btn btn-large btn-primary" type="submit">Continue</button>
-      </div>
+    <form id="name-form" onsubmit="return false">
+      <input type="text" placeholder="Your name" id="name" class="input-block-level" />
+      <button class="btn btn-large btn-primary" type="submit">Continue</button>
     </div>
   {{else}}
     <div class="row-fluid">
@@ -110,6 +108,7 @@ fiant sollemnes in futurum.
           </ul>
         {{/each}}
 
+        <p>Others can view your session at <a href="{{url}}">{{url}}</a>.</p>
       </div>
     </div>
   {{/if}}
