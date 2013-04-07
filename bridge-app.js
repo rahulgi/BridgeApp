@@ -1,10 +1,21 @@
 Indicators = new Meteor.Collection("indicators");
+People = new Meteor.Collection("people");
 
-var subjectCodes = ["Granular", "Jeffrey"];
+/*
+if (Meteor.isServer) {
+  Meteor.startup(function () {
+    People.remove({});
+    if (People.find().count() === 0) {
+      for (var i = 0; i < test.length; i ++) {
+        People.insert(test[i]);
+      }
+    }
+  });
+}
+*/
 
 /*
 Departments = new Meteor.collection("departments");
-People = new Meteor.Collection("people");
 */
 
 /*
@@ -160,12 +171,35 @@ if (Meteor.isClient) {
     }
   });
 
-  Template.results.helpers({
-    "subjectCodes": function () {
-      return _.range(subjectCodes.length);
+  Template.result.helpers({
+    "results": function() {
+      return _.range(result.length);
     },
-    "code": function(t) {
-      return subjectCodes[t]; 
+    "name": function (t) {
+      return result[t].name; },
+    "numbers": function(t) {
+      return _.range(result[t]["Phone Numbers"].length);
+    },
+    "number": function(t, l) {
+      return result[t]["Phone Numbers"][l];
+    },
+    "suid": function(t) {
+      return result[t].SUID;
+    },
+    "affiliations": function(t) {
+      return _.range(result[t]["Affiliations"].length);
+    },
+    "affiliationDepartment": function(t, l) {
+      return result[t]["Affiliations"][l].Department;
+    },
+    "affiliationPosition": function(t, l) {
+      return result[t]["Affiliations"][l].Position;
+    },
+    "addresses": function(t) {
+      return _.range(result[t]["Address"].length);
+    },
+    "address": function(t, l) {
+      return result[t]["Address"][l];
     }
   });
 }
@@ -208,3 +242,9 @@ if (Meteor.isServer) {
     }
   });
 }
+
+
+
+
+
+
