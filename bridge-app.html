@@ -33,13 +33,7 @@
             </div>
             <div id="search" class="accordion-body collapse in">
               <div class="accordion-inner">
-                <input type="text" class="marginfree" placeholder="Phone Number" />
-                <hr class="featurette-divider" />
-                <input class="marginfree" type="text" placeholder="Name" /><br>
-                <hr class="featurette-divider" />
-                <input type="text" placeholder="SUID" /><br>
-                <input type="text" placeholder="Enrollment Status" /><br>
-                <input type="text" placeholder="Department" />          
+                {{> search}}      
               </div>
             </div>
           </div>
@@ -67,6 +61,7 @@
 
 <template name="alert">
   {{#if edit}}
+    <div class="spacer pull-right">a</div>
     <a href="#" id="end" class="pull-right btn btn-primary">End</a>
     <a href="#" id="alert" class="pull-right btn btn-danger">Alert</a>
   {{/if}}
@@ -111,4 +106,14 @@
       </div>
     </div>
   {{/each}}
+</template>
+
+<template name="search">
+  <input type="text" class="marginfree" placeholder="Phone Number" value="{{value 'phone'}}" id="phone" {{disabled}} />
+  <hr class="featurette-divider" />
+  <input class="marginfree" type="text" placeholder="First Name" value="{{value 'first_name'}}" id="first_name" {{disabled}} /><br>
+  <hr class="featurette-divider" />
+  <input type="text" placeholder="SUID" value="{{value 'suid'}}" id="suid" {{disabled}} /><br>
+  <input type="text" placeholder="Enrollment Status" value="{{value 'enroll_status'}}" id="enroll_status" {{disabled}} /><br>
+  <input type="text" placeholder="Department" value="{{value 'department'}}" id="department" {{disabled}} />
 </template>

@@ -61,3 +61,21 @@ body {
   margin-bottom: 15px;
   padding: 7px 9px;
 }
+
+#alert-popover {
+  max-width: 150px;
+}
+
+#end-popover {
+  width: 180px;
+}
+
+.alert {
+  padding: 5px;
+  margin-bottom: 0px;
+}
+
+.spacer {
+  width: 50px;
+  visibility: hidden;
+}
