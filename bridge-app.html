@@ -54,6 +54,7 @@ Gupta-Iwasaki</a>
               <div class="accordion-inner result">
                 <span>Phone Numbers:</span><br>
                 <ul>
+                  {{> results}}
                   <li>999-999-9999</li>
                   <li>888-888-8888</li>
                 </ul>
@@ -122,5 +123,7 @@ fiant sollemnes in futurum.
 </template>
 
 <template name="results">
-
+  {{#each subjectCodes}}
+    <li>{{code this}}</li>
+  {{/each}}
 </template>

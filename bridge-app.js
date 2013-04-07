@@ -1,5 +1,7 @@
 Indicators = new Meteor.Collection("indicators");
 
+var subjectCodes = ["Granular", "Jeffrey"];
+
 /*
 Departments = new Meteor.collection("departments");
 People = new Meteor.Collection("people");
@@ -157,6 +159,15 @@ if (Meteor.isClient) {
       }
     }
   });
+
+  Template.results.helpers({
+    "subjectCodes": function () {
+      return _.range(subjectCodes.length);
+    },
+    "code": function(t) {
+      return subjectCodes[t]; 
+    }
+  });
 }
 
 if (Meteor.isServer) {
@@ -197,4 +208,3 @@ if (Meteor.isServer) {
     }
   });
 }
-
