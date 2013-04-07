@@ -71,21 +71,69 @@ var template_helpers = {
 };
 
 if (Meteor.isClient) {
-  Meteor.autosubscribe(function () { // Auto-update 'name'
-    var id = Indicators.findOne(Session.get('id'));
-    if (id)
-      Session.set('name', id.name);
-  });
-  Meteor.autosubscribe(function () {
-    if (Session.get('mode') == 'edit') {
-      if (Indicators.findOne({'_id': Session.get('id'), end: true})) {// This ID has already been ended - redirect to the viewing URL
-        console.log('a');
-        router.navigate(Session.get('id'), {trigger: true});
-      }
-    }
-  });
-
   Meteor.startup(function () {
+
+    Meteor.autorun(function () { // Auto-update 'name'
+      var id = Indicators.findOne(Session.get('id'));
+      if (id)
+        Session.set('name', id.name);
+    });
+    Meteor.autorun(function () {
+      if (Session.get('mode') == 'edit') {
+        if (Indicators.findOne({'_id': Session.get('id'), end: true})) {// This ID has already been ended - redirect to the viewing URL
+          console.log('a');
+          router.navigate(Session.get('id'), {trigger: true});
+        } else {
+          $('#alert').popover({
+            html: true,
+            trigger: 'manual',
+            placement: 'bottom',
+            content: function () {
+              var content = '<div id="alert-popover">Are you sure you want to send an alert?<br />';
+              if (Session.get('alerted'))
+                content += '<div id="already-alerted" class="alert alert-error">You have already sent an alert.</div>';
+              content += '<button class="btn btn-primary" onclick="Template.alert.alert()">Alert</button> \
+                          <button class="pull-right btn">Cancel</button></div>';
+              return content;
+            }
+          }).click(function (e) {
+            e.stopPropagation();
+            $(this).popover('show');
+          });
+
+          $('#end').popover({
+            html: true,
+            trigger: 'manual',
+            placement: 'bottom',
+            content: function () {
+              var content = '<div id="end-popover">Are you sure you want to end this session? You will no longer be able to edit it.<br />';
+              if (!Session.get('alerted'))
+                content += '<div id="not-alerted" class="alert alert-error">You have not alerted yet. \
+                            <div class="text-center"><button class="btn btn-danger" onclick="return Template.alert.alert()">Alert now</button></div></div>';
+              content += '<button class="btn btn-primary" onclick="Template.alert.end()">End</button> \
+                          <button class="pull-right btn">Cancel</button></div>';
+              return content;
+            }
+          }).click(function (e) {
+            e.stopPropagation();
+            $(this).popover('show');
+          });
+
+          $('html').click(function () {
+            $('#alert').popover('hide');
+            $('#end').popover('hide');
+          });
+        }
+      }
+    });
+    Meteor.autorun(function () {
+      if (Indicators.findOne({'_id': Session.get('id'), alert: true})) 
+        Session.set('alerted', true);
+      else
+        Session.set('alerted', false);
+    });
+
+
     var Router = Backbone.Router.extend({
       routes: {
         ':id/edit': 'edit',
@@ -137,31 +185,23 @@ if (Meteor.isClient) {
     }
   });
 
-  Template.alert.alert = function () {
-    Indicators.update(Session.get('id'), {$set: {alert: true}});
+  Template.alert.alert = function (e) {
+    // Indicators.update(Session.get('id'), {$set: {alert: true}});
     Meteor.call("alert", Session.get('id'), Session.get('name'));
+    return false;
+  }
+  Template.alert.end = function () {
+    Indicators.update(Session.get('id'), {$set: {end: true}});
   }
   Template.alert.edit = function () {
     return Session.get('mode') == 'edit';
   }
-  Template.alert.events({
-    'click': function (e) {
-      var eid = e.toElement.id;
-      if (eid == "end") {
-        if (!Indicators.findOne({'_id': Session.get('id'), alert: true}))
-          if (confirm("You have not alerted yet. Do you want to alert now?"))
-            Template.alert.alert();
-        Indicators.update(Session.get('id'), {$set: {end: true}});
-      } else {
-        Template.alert.alert();
-      }
-    }
-  });
 }
 
 if (Meteor.isServer) {
   Meteor.methods({
     alert: function (id, name) {
+      console.log('Alert!');
       var url = Meteor.absoluteUrl(id);
       // Text
       // 
