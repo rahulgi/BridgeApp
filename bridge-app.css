@@ -7,3 +7,19 @@ body {
 .selected {
   background-color: yellow;
 }
+
+#sidebar .marginfree {
+  margin-bottom: 0px;
+}
+
+/*
+#sidebar input {
+  background-color: inherit;
+  border: none;
+  border-bottom: 1px solid #cccccc;
+  box-shadow: none;
+  -webkit-box-shadow: none;
+  border-radius: none;
+  -webkit-border-radius: none;
+}
+*/
