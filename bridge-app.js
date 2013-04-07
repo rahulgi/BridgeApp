@@ -86,4 +86,6 @@ if (Meteor.isClient) {
       }
     }
   });
+
+  $("#sidebar").accordion();
 }

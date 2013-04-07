@@ -8,12 +8,21 @@ body {
   background-color: yellow;
 }
 
-#sidebar .marginfree {
+.accordion-group {
+  background-color: #f5f5f5;
+}
+
+.result {
+  max-height: 250px;
+  overflow: auto;
+}
+
+#search .marginfree {
   margin-bottom: 0px;
 }
 
 /*
-#sidebar input {
+#search input {
   background-color: inherit;
   border: none;
   border-bottom: 1px solid #cccccc;
