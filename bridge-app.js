@@ -3,10 +3,12 @@ Indicators = new Meteor.Collection("indicators");
 if (Meteor.isClient) {
   Meteor.Router.add({
     '/:id/edit': function (id) {
-      return id;
+      Session.set('id', id);
+      return 'edit';
     },
     '/:id': function (id) {
-      return id;
+      Session.set('id', id);
+      return 'view';
     },
     '/': '/'
   });
@@ -19,11 +21,11 @@ if (Meteor.isClient) {
   });
 
 
-  var tstrings = ["Concerning statements",
+  Template.body.tstrings = ["Concerning statements",
                   "Behavioral cues",
                   "Events/Situational cues",
                   "Feelings"];
-  var lstrings = [
+  Template.body.lstrings = [
     ["Talking about suicide or discussing thoughts of suicide",
         "Wish I were dead",
         "Going to end it all",
@@ -47,9 +49,35 @@ if (Meteor.isClient) {
         "Humiliation",
         "Purposelessness"]];
   Template.body.helpers({
-    title: function () { return _.range(tstrings.length); },
-    tstring: function (t) { return tstrings[t]; },
-    listitem: function (t) { return _.range(lstrings[t].length); },
-    lstring: function (t, l) { return lstrings[t][l]; }
+    title: function () { return _.range(Template.body.tstrings.length); },
+    tstring: function (t) { return Template.body.tstrings[t]; },
+    item: function (t) { return _.range(Template.body.lstrings[t].length); },
+    lstring: function (t, l) { return Template.body.lstrings[t][l]; },
+    selected: function (t, l) {
+      var concat = t + '_' + l;
+      var param = {};
+      param[concat] = true;
+      param['_id'] = Session.get('id');
+      if (Indicators.findOne(param))
+        return "class=selected";
+      return '';
+    }
+  });
+  Template.body.events({
+    'click': function (e) {
+      if (Meteor.Router.page() != 'edit')
+        return;
+      var elem = e.toElement;
+      var clicked = e.toElement.dataset;
+      if (Object.keys(clicked).length !== 0) { // clicked is non-empty - should be a <li>
+        var concat = clicked.title + '_' + clicked.item;
+        var param = {};
+        param[concat] = true;
+        if (elem.classList.contains('selected'))
+          Indicators.update(Session.get('id'), {$unset: param});
+        else
+          Indicators.update(Session.get('id'), {$set: param});
+      }
+    }
   });
 }

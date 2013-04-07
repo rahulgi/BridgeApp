@@ -27,8 +27,8 @@
   {{#each title}}
   <h1>{{tstring this}}</h1>
   <ul>
-    {{#each listitem this}}
-    <li>{{lstring ../this this}}</li>
+    {{#each item this}}
+    <li data-title="{{../this}}" data-item="{{this}}" {{selected ../this this}}>{{lstring ../this this}}</li>
     {{/each}}
   </ul>
   {{/each}}

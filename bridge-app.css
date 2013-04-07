@@ -3,3 +3,7 @@
 body {
   padding-top: 60px;
 }
+
+.selected {
+  background-color: yellow;
+}
