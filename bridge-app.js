@@ -1,11 +1,29 @@
 Indicators = new Meteor.Collection("indicators");
 
 if (Meteor.isClient) {
+  Meteor.Router.add({
+    '/:id/edit': function (id) {
+      return id;
+    },
+    '/:id': function (id) {
+      return id;
+    },
+    '/': '/'
+  });
+
+  Meteor.startup(function () {
+    if (Meteor.Router.page() == '/') {
+      var userid = Indicators.insert({});
+      Meteor.Router.to('/' + userid + '/edit');
+    }
+  });
+
+
   var tstrings = ["Concerning statements",
                   "Behavioral cues",
                   "Events/Situational cues",
                   "Feelings"];
-  lstrings = [
+  var lstrings = [
     ["Talking about suicide or discussing thoughts of suicide",
         "Wish I were dead",
         "Going to end it all",
@@ -28,7 +46,7 @@ if (Meteor.isClient) {
         "Shame",
         "Humiliation",
         "Purposelessness"]];
-  Template.hello.helpers({
+  Template.body.helpers({
     title: function () { return _.range(tstrings.length); },
     tstring: function (t) { return tstrings[t]; },
     listitem: function (t) { return _.range(lstrings[t].length); },

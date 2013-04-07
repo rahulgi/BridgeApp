@@ -17,14 +17,13 @@
         </div>
       </div>
       <div class="span9">
-        {{> hello}}
+        {{> body}}
       </div>
     </div>
   </div>
 </body>
 
-<template name="hello">
-
+<template name="body">
   {{#each title}}
   <h1>{{tstring this}}</h1>
   <ul>
