@@ -219,7 +219,8 @@ var curNodesData = null;
 var curLinksData = null;
 
 var dummyFunc = function(subNodes){
-			subNodes.enter().append("circle").attr("class","subNodes").attr("fill","red").attr("cx",function(d){
+			template_helpers.selected(clickedElemGlobal.id)
+			subNodes.enter().append("circle").attr("class","subNodes").attr("cx",function(d){
 				return d.x;
 			}).attr("cy",function(d){
 
@@ -230,6 +231,16 @@ var dummyFunc = function(subNodes){
 				console.log(d.id);
 				handleIndicatorClick(clickedElemGlobal.id,d.id);
 			}).transition().duration(2000);
+
+			Meteor.autorun(function(d){
+				if(template_helpers.selected(clickedElemGlobal.id,d.id)){
+					subNodes.attr("fill","green");
+			} else {
+				subNodes.attr("fill","red");
+			}
+
+
+			});
 
 
 }
