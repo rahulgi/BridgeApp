@@ -1,4 +1,24 @@
+var blahblah = "HELLO";
+
 Indicators = new Meteor.Collection("indicators");
+
+
+/*
+Departments = new Meteor.collection("departments");
+People = new Meteor.Collection("people");
+*/
+
+/*
+if (Meteor.isServer) {
+  if (Players.find().cound() === 0) {
+    var test = {
+      "numbers": ["9999999999", "8888888888"],
+      "suid": ["rahulgi"],
+      "afiiliations": [{"Department": "Computer Science"}], 
+    };
+  }
+}
+*/
 
 if (Meteor.isClient) {
   Meteor.startup(function () {
@@ -87,3 +107,4 @@ if (Meteor.isClient) {
     }
   });
 }
+
