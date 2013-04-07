@@ -23,3 +23,7 @@ body {
   -webkit-border-radius: none;
 }
 */
+
+#alert {
+  margin-bottom: 5px;
+}
