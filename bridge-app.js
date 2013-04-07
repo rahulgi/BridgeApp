@@ -1,22 +1,30 @@
 Indicators = new Meteor.Collection("indicators");
 
 if (Meteor.isClient) {
-  Meteor.Router.add({
-    '/:id/edit': function (id) {
-      Session.set('id', id);
-      return 'edit';
-    },
-    '/:id': function (id) {
-      Session.set('id', id);
-      return 'view';
-    },
-    '/': '/'
-  });
-
   Meteor.startup(function () {
-    if (Meteor.Router.page() == '/') {
+    var Router = Backbone.Router.extend({
+      routes: {
+        ':id/edit': 'edit',
+        ':id': 'view',
+        '': 'main'
+      },
+      edit: function (id) {
+        Session.set('id', id);
+        Session.set('mode', 'edit');
+      },
+      view: function (id) {
+        Session.set('id', id);
+        Session.set('mode', 'view');
+      },
+      main: function () {
+        Session.set('mode', 'main');
+      }
+    });
+    var router = new Router;
+    Backbone.history.start({pushState: true});
+    if (Session.get('mode') == 'main') {
       var userid = Indicators.insert({});
-      Meteor.Router.to('/' + userid + '/edit');
+      router.navigate('/' + userid + '/edit');
     }
   });
 
@@ -65,7 +73,7 @@ if (Meteor.isClient) {
   });
   Template.body.events({
     'click': function (e) {
-      if (Meteor.Router.page() != 'edit')
+      if (Session.get('mode') != 'edit')
         return;
       var elem = e.toElement;
       var clicked = e.toElement.dataset;
