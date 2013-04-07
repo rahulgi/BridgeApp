@@ -99,6 +99,8 @@ var updateNodes = function(nodes){
 		clickedId = d.id; 
 		clickedElem = d;
 		clickedElemGlobal = clickedElem;
+		console.log("clickedElemGlobal");
+		console.log(clickedElemGlobal);
 		var otherNodes = nodesG.selectAll("circle.nodes");
 		otherNodes.transition().attr("cx",function(current){
 			return clickedElem.x;
@@ -157,9 +159,11 @@ $(document).click(function(e){
 		var subNodes = nodesG.selectAll("circle.subNodes");
 		var superNodes = nodesG.selectAll("circle.nodes");
 		subNodes.transition().duration(2000).attr("cx",function(d){
+			if(clickedElemGlobal != null){
 			return clickedElemGlobal.x;
-		}).attr("cy",function(d){
-			return clickedElemGlobal.y;
+		}}).attr("cy",function(d){
+			if(clickedElemGlobal != null)
+				return clickedElemGlobal.y;
 
 		}).remove();
 		clickedElemGlobal = null;

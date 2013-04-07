@@ -162,6 +162,7 @@ if (Meteor.isClient) {
     var concat = t + '_' + l;
     var param = {};
     param[concat] = true;
+    // if (Indicators.findOne({'_id': Session.get('id'), para TODO
     if (elem.classList.contains('selected'))
       Indicators.update(Session.get('id'), {$unset: param});
     else
