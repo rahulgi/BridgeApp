@@ -33,6 +33,6 @@ body {
 }
 */
 
-#alert {
+#alert, #end {
   margin-bottom: 5px;
 }

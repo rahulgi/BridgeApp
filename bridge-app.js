@@ -1,5 +1,3 @@
-var blahblah = "HELLO";
-
 Indicators = new Meteor.Collection("indicators");
 
 /*
